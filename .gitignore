@@ -48,6 +48,9 @@ secrets.json
 .env
 *.Development.json
 
+# App settings (contains credentials)
+appsettings.json
+
 # Node
 node_modules/
 

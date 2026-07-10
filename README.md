@@ -23,12 +23,21 @@ Aplicación web ASP.NET Core 10 MVC para la gestión de la base de datos **Sakil
    psql -U postgres -d sakila -c "GRANT ALL ON SCHEMA public TO cruduser;"
    ```
 
-3. **Configurar cadenas de conexión** (ya están preconfiguradas en `appsettings.json`):
-   ```json
-   "ConnectionStrings": {
-     "DefaultConnection": "Host=localhost;Port=5432;Database=sakila;Username=cruduser;Password=crud123",
-     "IdentityConnection": "Host=localhost;Port=5432;Database=sakila;Username=cruduser;Password=crud123"
-   }
+3. **Configurar credenciales (elige una opcion):**
+
+   **Opcion A - Copiar el archivo de ejemplo:**
+   ```bash
+   cd SakilaApp
+   cp appsettings.example.json appsettings.json
+   ```
+   Luego edita `appsettings.json` con tus credenciales reales.
+
+   **Opcion B - User Secrets (recomendado):**
+   ```bash
+   cd SakilaApp
+   dotnet user-secrets init
+   dotnet user-secrets set "ConnectionStrings:DefaultConnection" "Host=localhost;Port=5432;Database=sakila;Username=cruduser;Password=crud123"
+   dotnet user-secrets set "ConnectionStrings:IdentityConnection" "Host=localhost;Port=5432;Database=sakila;Username=cruduser;Password=crud123"
    ```
 
 4. **Aplicar migraciones de Identity:**
