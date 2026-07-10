@@ -1,0 +1,41 @@
+@model SakilaApp.Models.Film
+
+@{
+    ViewData["Title"] = "Eliminar Película";
+}
+
+<div class="container mt-4">
+    <div class="d-flex justify-content-between align-items-center mb-3">
+        <h2 class="mb-0">Eliminar Película</h2>
+        <a asp-action="Index" class="btn btn-outline-secondary">← Volver</a>
+    </div>
+
+    <div class="card shadow-sm">
+        <div class="card-header">
+            <strong>¿Está seguro de que desea eliminar esta película?</strong>
+        </div>
+        <div class="card-body">
+            <dl class="row">
+                <dt class="col-sm-3 fw-semibold">@Html.DisplayNameFor(model => model.Title)</dt>
+                <dd class="col-sm-9">@Html.DisplayFor(model => model.Title)</dd>
+
+                <dt class="col-sm-3 fw-semibold">@Html.DisplayNameFor(model => model.Description)</dt>
+                <dd class="col-sm-9">@Html.DisplayFor(model => model.Description)</dd>
+
+                <dt class="col-sm-3 fw-semibold">@Html.DisplayNameFor(model => model.ReleaseYear)</dt>
+                <dd class="col-sm-9">@Html.DisplayFor(model => model.ReleaseYear)</dd>
+
+                <dt class="col-sm-3 fw-semibold">@Html.DisplayNameFor(model => model.RentalRate)</dt>
+                <dd class="col-sm-9">@Html.DisplayFor(model => model.RentalRate)</dd>
+
+                <dt class="col-sm-3 fw-semibold">@Html.DisplayNameFor(model => model.Length)</dt>
+                <dd class="col-sm-9">@Html.DisplayFor(model => model.Length)</dd>
+            </dl>
+
+            <form asp-action="Delete">
+                <input type="hidden" asp-for="FilmId" />
+                <input type="submit" value="Confirmar eliminación" class="btn btn-outline-danger" />
+            </form>
+        </div>
+    </div>
+</div>

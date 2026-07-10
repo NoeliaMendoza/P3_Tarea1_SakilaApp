@@ -1,0 +1,60 @@
+# .NET
+bin/
+obj/
+*.user
+*.suo
+*.userosscache
+*.sln.docstates
+*.userprefs
+
+# Build Results
+[Dd]ebug/
+[Rr]elease/
+x64/
+x86/
+[Ww][Ii][Nn]32/
+[Aa][Rr][Mm]/
+[Aa][Rr][Mm]64/
+bld/
+[Bb]in/
+[Oo]bj/
+[Ll]og/
+[Ll]ogs/
+
+# NuGet
+*.nupkg
+**/packages/*
+!**/packages/build/
+*.nuget.props
+*.nuget.targets
+
+# Visual Studio
+.vs/
+*.csproj.user
+*.dbmdl
+*.jfm
+
+# Rider
+.idea/
+*.sln.iml
+
+# dotnet publish
+publish/
+
+# User Secrets
+secrets.json
+
+# Environment
+.env
+*.Development.json
+
+# Node
+node_modules/
+
+# OS
+.DS_Store
+Thumbs.db
+Desktop.ini
+
+# Database backup (but keep the script)
+sakila_backup.sql

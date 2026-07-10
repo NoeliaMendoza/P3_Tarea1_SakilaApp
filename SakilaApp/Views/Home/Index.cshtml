@@ -1,0 +1,105 @@
+﻿@{
+    ViewData["Title"] = "Inicio";
+}
+
+<div class="px-4 py-5 mb-4 bg-dark text-white rounded-3">
+    <div class="container py-4">
+        <h1 class="display-5 fw-bold">Sakila App</h1>
+
+        <p class="col-md-8 fs-5 text-white-50">
+            Sistema de gestión de contenido para la base de datos Sakila.
+            Administra películas, actores, categorías e idiomas desde un solo lugar,
+            con control de acceso por roles.
+        </p>
+
+        @if (!(User.Identity?.IsAuthenticated ?? false))
+        {
+            <a class="btn btn-light btn-lg" asp-area="Identity" asp-page="/Account/Login">
+                Iniciar sesión
+            </a>
+        }
+        else
+        {
+            <a class="btn btn-light btn-lg" asp-controller="Films" asp-action="Index">
+                Ver películas
+            </a>
+        }
+    </div>
+</div>
+
+<div class="row g-4 mb-4">
+
+    <div class="col-md-3">
+        <div class="card h-100 border-0 shadow-sm">
+            <div class="card-body">
+                <h6 class="text-uppercase text-muted small mb-2">Módulo</h6>
+                <h5 class="card-title">Películas</h5>
+                <p class="card-text text-muted small">
+                    Consulta y administra el catálogo completo de películas
+                    con filtros por duración y título.
+                </p>
+            </div>
+        </div>
+    </div>
+
+    <div class="col-md-3">
+        <div class="card h-100 border-0 shadow-sm">
+            <div class="card-body">
+                <h6 class="text-uppercase text-muted small mb-2">Módulo</h6>
+                <h5 class="card-title">Actores</h5>
+                <p class="card-text text-muted small">
+                    Gestiona el registro de actores con paginación y búsqueda
+                    por apellido.
+                </p>
+            </div>
+        </div>
+    </div>
+
+    <div class="col-md-3">
+        <div class="card h-100 border-0 shadow-sm">
+            <div class="card-body">
+                <h6 class="text-uppercase text-muted small mb-2">Módulo</h6>
+                <h5 class="card-title">Categorías</h5>
+                <p class="card-text text-muted small">
+                    Administra las categorías disponibles para clasificar
+                    el contenido del catálogo.
+                </p>
+            </div>
+        </div>
+    </div>
+
+    <div class="col-md-3">
+        <div class="card h-100 border-0 shadow-sm">
+            <div class="card-body">
+                <h6 class="text-uppercase text-muted small mb-2">Módulo</h6>
+                <h5 class="card-title">Idiomas</h5>
+                <p class="card-text text-muted small">
+                    Controla los idiomas registrados, accesible únicamente
+                    para el rol Administrador.
+                </p>
+            </div>
+        </div>
+    </div>
+
+</div>
+
+@if (User.Identity?.IsAuthenticated ?? false)
+{
+    <div class="card border-0 bg-light">
+        <div class="card-body d-flex align-items-center justify-content-between">
+            <div>
+                <h6 class="mb-1">Sesión activa</h6>
+                <p class="mb-0 text-muted small">
+                    Conectado como <strong>@User.Identity?.Name</strong>
+                </p>
+            </div>
+
+            @if (User.IsInRole("Administrador"))
+            {
+                <a class="btn btn-dark btn-sm" asp-controller="Admin" asp-action="Index">
+                    Panel de administración
+                </a>
+            }
+        </div>
+    </div>
+}

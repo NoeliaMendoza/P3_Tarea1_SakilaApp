@@ -1,0 +1,79 @@
+@model SakilaApp.Models.Film
+
+@{
+    ViewData["Title"] = "Nueva Película";
+}
+
+<div class="container mt-4">
+    <div class="d-flex justify-content-between align-items-center mb-3">
+        <h2 class="mb-0">Nueva Película</h2>
+        <a asp-action="Index" class="btn btn-outline-secondary">← Volver</a>
+    </div>
+
+    <div class="card shadow-sm">
+        <div class="card-body">
+            <form asp-action="Create">
+                <div asp-validation-summary="ModelOnly" class="alert alert-danger"></div>
+
+                <div class="mb-3">
+                    <label asp-for="Title" class="form-label fw-semibold"></label>
+                    <input asp-for="Title" class="form-control" />
+                    <span asp-validation-for="Title" class="text-danger small"></span>
+                </div>
+
+                <div class="mb-3">
+                    <label asp-for="Description" class="form-label fw-semibold"></label>
+                    <input asp-for="Description" class="form-control" />
+                    <span asp-validation-for="Description" class="text-danger small"></span>
+                </div>
+
+                <div class="row">
+                    <div class="col-md-6 mb-3">
+                        <label asp-for="ReleaseYear" class="form-label fw-semibold"></label>
+                        <input asp-for="ReleaseYear" class="form-control" />
+                        <span asp-validation-for="ReleaseYear" class="text-danger small"></span>
+                    </div>
+                    <div class="col-md-6 mb-3">
+                        <label asp-for="Length" class="form-label fw-semibold"></label>
+                        <input asp-for="Length" class="form-control" />
+                        <span asp-validation-for="Length" class="text-danger small"></span>
+                    </div>
+                </div>
+
+                <div class="row">
+                    <div class="col-md-6 mb-3">
+                        <label asp-for="LanguageId" class="form-label fw-semibold"></label>
+                        <select asp-for="LanguageId" class="form-control" asp-items="ViewBag.LanguageId"></select>
+                    </div>
+                    <div class="col-md-6 mb-3">
+                        <label asp-for="OriginalLanguageId" class="form-label fw-semibold"></label>
+                        <select asp-for="OriginalLanguageId" class="form-control"
+                                asp-items="ViewBag.OriginalLanguageId"></select>
+                    </div>
+                </div>
+
+                <div class="mb-3">
+                    <label asp-for="SpecialFeatures" class="form-label fw-semibold"></label>
+                    <input asp-for="SpecialFeatures" class="form-control" />
+                    <span asp-validation-for="SpecialFeatures" class="text-danger small"></span>
+                </div>
+
+                @* <div class="mb-3">
+                    <label asp-for="Fulltext" class="form-label fw-semibold"></label>
+                    <input asp-for="Fulltext" class="form-control" />
+                    <span asp-validation-for="Fulltext" class="text-danger small"></span>
+                </div> *@
+
+                <div class="mt-3">
+                    <input type="submit" value="Guardar" class="btn btn-outline-primary" />
+                </div>
+            </form>
+        </div>
+    </div>
+</div>
+
+@section Scripts {
+    @{
+        await Html.RenderPartialAsync("_ValidationScriptsPartial");
+    }
+}
