@@ -92,13 +92,7 @@ SakilaApp/
   wwwroot/         # Archivos estáticos (CSS, JS, libs)
 ```
 
-## Capturas de pantalla
+## Base de datos
 
-Las capturas de pantalla se encuentran en la carpeta `Screenshots/`:
-
-1. `login.png` - Página de inicio de sesión
-2. `dashboard.png` - Página principal
-3. `actors.png` - Listado de actores
-4. `films.png` - Listado de películas
-5. `create.png` - Formulario de creación
-6. `admin.png` - Panel de administración
+El respaldo de la base de datos se encuentra en `Database/sakila_backup.sql`.  
+Ver `Database/README.md` para más detalles.
