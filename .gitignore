@@ -56,5 +56,5 @@ node_modules/
 Thumbs.db
 Desktop.ini
 
-# Database backup (but keep the script)
-sakila_backup.sql
+# Database backup files (raw dumps)
+*.backup
