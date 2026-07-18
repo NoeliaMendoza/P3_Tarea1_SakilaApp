@@ -17,29 +17,42 @@ builder.Services.AddDbContext<ApplicationDbContext>(options =>
     options.UseNpgsql(builder.Configuration.GetConnectionString("IdentityConnection")));
 
 builder.Services
-    .AddDefaultIdentity<IdentityUser>(options =>
+    .AddIdentityCore<IdentityUser>(options =>
     {
-        options.SignIn.RequireConfirmedAccount = true;
+        options.SignIn.RequireConfirmedAccount = false;
         options.Password.RequireDigit = true;
         options.Password.RequireUppercase = true;
         options.Password.RequireLowercase = true;
         options.Password.RequiredLength = 6;
     })
     .AddRoles<IdentityRole>()
-    .AddEntityFrameworkStores<ApplicationDbContext>();
+    .AddEntityFrameworkStores<ApplicationDbContext>()
+    .AddDefaultUI()
+    .AddDefaultTokenProviders();
+
+builder.Services
+    .AddAuthentication(options =>
+    {
+        options.DefaultScheme = Microsoft.AspNetCore.Identity.IdentityConstants.ApplicationScheme;
+        options.DefaultSignInScheme = Microsoft.AspNetCore.Identity.IdentityConstants.ApplicationScheme;
+    })
+    .AddCookie(Microsoft.AspNetCore.Identity.IdentityConstants.ApplicationScheme)
+    .AddCookie(Microsoft.AspNetCore.Identity.IdentityConstants.ExternalScheme)
+    .AddGoogle(options =>
+    {
+        options.ClientId = builder.Configuration["Authentication:Google:ClientId"]!;
+        options.ClientSecret = builder.Configuration["Authentication:Google:ClientSecret"]!;
+    });
 
 builder.Services.Configure<EmailSettings>(
     builder.Configuration.GetSection("EmailSettings"));
 
 builder.Services.AddTransient<IEmailSender, GmailEmailSender>();
 
-builder.Services
-.AddAuthentication()
-.AddGoogle(options =>
-{
-    options.ClientId = builder.Configuration["Authentication:Google:ClientId"]!;
-    options.ClientSecret = builder.Configuration["Authentication:Google:ClientSecret"]!;
-});
+builder.Services.Configure<PayPhoneSettings>(
+    builder.Configuration.GetSection("PayPhone"));
+
+builder.Services.AddHttpClient<PayPhoneApiLinkService>();
 
 var app = builder.Build();
 

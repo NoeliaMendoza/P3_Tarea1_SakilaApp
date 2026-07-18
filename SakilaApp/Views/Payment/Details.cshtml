@@ -1,0 +1,63 @@
+@model SakilaApp.Models.Commerce.PaymentTransaction
+
+@{
+    ViewData["Title"] = "Detalle del pago";
+}
+
+<div class="container mt-4">
+    <h2 class="mb-4">Detalle del pago</h2>
+
+    <div class="card border-0 shadow-sm mb-4">
+        <div class="card-body">
+            <div class="row g-3">
+                <div class="col-md-6">
+                    <p><strong>Orden:</strong> #@Model.PurchaseOrderId</p>
+                    <p><strong>Estado:</strong>
+                        <span class="badge @(Model.Status == "Paid" ? "bg-success" : "bg-warning")">@Model.Status</span>
+                    </p>
+                </div>
+                <div class="col-md-6">
+                    <p><strong>Total:</strong> @((Model.AmountInCents / 100m).ToString("C"))</p>
+                    <p><strong>Transacción cliente:</strong> @Model.ClientTransactionId</p>
+                </div>
+            </div>
+
+            @if (!string.IsNullOrWhiteSpace(Model.PayphonePaymentUrl))
+            {
+                <a class="btn btn-success mt-3" href="@Model.PayphonePaymentUrl" target="_blank">
+                    Abrir link de pago PayPhone
+                </a>
+            }
+
+            @if (User.IsInRole("Administrador") && Model.Status == "Pending")
+            {
+                <a class="btn btn-warning mt-3 ms-2" asp-action="MarkAsPaid" asp-route-id="@Model.PaymentTransactionId">
+                    Marcar como pagado (demo)
+                </a>
+            }
+        </div>
+    </div>
+
+    <h4 class="mb-3">Detalle de la orden</h4>
+    <table class="table table-hover table-bordered">
+        <thead>
+            <tr class="table-light">
+                <th>Película</th>
+                <th>Cantidad</th>
+                <th>Precio</th>
+                <th>Subtotal</th>
+            </tr>
+        </thead>
+        <tbody>
+            @foreach (var d in Model.PurchaseOrder.Details)
+            {
+                <tr>
+                    <td>@d.FilmTitle</td>
+                    <td>@d.Quantity</td>
+                    <td>@d.UnitPrice.ToString("C")</td>
+                    <td>@d.Subtotal.ToString("C")</td>
+                </tr>
+            }
+        </tbody>
+    </table>
+</div>
