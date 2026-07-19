@@ -24,7 +24,7 @@
             {
                 <tr>
                     <td>@item.Title</td>
-                    <td>@item.UnitPrice.ToString("C")</td>
+                    <td>$@item.UnitPrice.ToString("F2")</td>
                     <td>@item.Stock</td>
                     <td>
                         <form asp-action="AumentarStock" method="post" class="d-flex gap-2">
