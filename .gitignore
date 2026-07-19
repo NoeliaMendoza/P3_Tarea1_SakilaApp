@@ -46,6 +46,9 @@ secrets.json
 
 # Environment
 .env
+SakilaApp - copia*/
+SakilaApp - copia*.zip
+SakilaApp/Untitled-*.md
 *.Development.json
 
 # App settings (contains credentials)
