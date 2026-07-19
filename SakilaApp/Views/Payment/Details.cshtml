@@ -17,16 +17,30 @@
                     </p>
                 </div>
                 <div class="col-md-6">
-                    <p><strong>Total:</strong> @((Model.AmountInCents / 100m).ToString("C"))</p>
+                    <p><strong>Total:</strong> $@((Model.AmountInCents / 100m).ToString("F2"))</p>
                     <p><strong>Transacción cliente:</strong> @Model.ClientTransactionId</p>
                 </div>
             </div>
 
-            @if (!string.IsNullOrWhiteSpace(Model.PayphonePaymentUrl))
+            @if (Model.Provider == "PayPhone" && !string.IsNullOrWhiteSpace(Model.PayphonePaymentUrl))
             {
                 <a class="btn btn-success mt-3" href="@Model.PayphonePaymentUrl" target="_blank">
                     Abrir link de pago PayPhone
                 </a>
+            }
+
+            @if (Model.Provider == "PayPal" && Model.Status == "Pending" && !string.IsNullOrWhiteSpace(Model.PayPalApprovalUrl))
+            {
+                <a class="btn btn-info mt-3" href="@Model.PayPalApprovalUrl" target="_blank">
+                    Abrir PayPal Sandbox
+                </a>
+            }
+
+            @if (Model.Status == "Paid")
+            {
+                <div class="alert alert-success mt-3">
+                    Pago confirmado correctamente.
+                </div>
             }
 
             @if (User.IsInRole("Administrador") && Model.Status == "Pending")
@@ -54,8 +68,8 @@
                 <tr>
                     <td>@d.FilmTitle</td>
                     <td>@d.Quantity</td>
-                    <td>@d.UnitPrice.ToString("C")</td>
-                    <td>@d.Subtotal.ToString("C")</td>
+                    <td>$@d.UnitPrice.ToString("F2")</td>
+                    <td>$@d.Subtotal.ToString("F2")</td>
                 </tr>
             }
         </tbody>
