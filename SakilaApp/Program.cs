@@ -3,6 +3,7 @@ using Microsoft.EntityFrameworkCore;
 using SakilaApp.Data;
 using Microsoft.AspNetCore.Identity.UI.Services;
 using SakilaApp.Services;
+using SakilaApp.Services.Payments;
 using SakilaApp.Settings;
 
 var builder = WebApplication.CreateBuilder(args);
@@ -54,6 +55,11 @@ builder.Services.Configure<PayPhoneSettings>(
 
 builder.Services.AddHttpClient<PayPhoneApiLinkService>();
 
+builder.Services.Configure<PayPalSettings>(
+    builder.Configuration.GetSection("PayPal"));
+
+builder.Services.AddHttpClient<PayPalService>();
+
 var app = builder.Build();
 
 if (!app.Environment.IsDevelopment())
@@ -77,6 +83,13 @@ app.MapRazorPages();
 
 using (var scope = app.Services.CreateScope())
 {
+    var appDb = scope.ServiceProvider.GetRequiredService<ApplicationDbContext>();
+
+    if (!await appDb.Database.CanConnectAsync())
+    {
+        await appDb.Database.MigrateAsync();
+    }
+
     await DbSeeder.SeedAsync(scope.ServiceProvider);
 }
 
