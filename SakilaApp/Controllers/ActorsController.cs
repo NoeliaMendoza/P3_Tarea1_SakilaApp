@@ -68,12 +68,34 @@ namespace SakilaApp.Controllers
         Mostrar los 5 actores cuyos nombres empiecen con N o terminen con N.
         */
 
-        public async Task<IActionResult> Index()
+        public async Task<IActionResult> Index(string? buscar, int pagina = 1)
         {
-            var actores = await _context.Actors
-                .Where(a => a.FirstName.StartsWith("N") || a.FirstName.EndsWith("N"))
-                .Take(5)
+            const int pageSize = 10;
+            var consulta = _context.Actors.AsQueryable();
+
+            if (!string.IsNullOrWhiteSpace(buscar))
+            {
+                consulta = consulta.Where(a =>
+                    a.FirstName.Contains(buscar) || a.LastName.Contains(buscar));
+            }
+
+            pagina = Math.Max(1, pagina);
+            var totalItems = await consulta.CountAsync();
+            var totalPages = (int)Math.Ceiling((double)totalItems / pageSize);
+            totalPages = Math.Max(1, totalPages);
+            pagina = Math.Min(pagina, totalPages);
+
+            var actores = await consulta
+                .OrderBy(a => a.LastName)
+                .ThenBy(a => a.FirstName)
+                .Skip((pagina - 1) * pageSize)
+                .Take(pageSize)
                 .ToListAsync();
+
+            ViewBag.Buscar = buscar;
+            ViewBag.PaginaActual = pagina;
+            ViewBag.TotalPaginas = totalPages;
+            ViewBag.PageSize = pageSize;
 
             return View(actores);
         }

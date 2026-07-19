@@ -610,15 +610,42 @@ namespace SakilaApp.Controllers
             return View(peliculas);
         }*/
 
-        public async Task<IActionResult> Index()
+        public async Task<IActionResult> Index(string? buscar, int? duracionMinima, int pagina = 1)
         {
-            var peliculas = await _context.Films
-            .Include(f => f.FilmCategories)
-                .ThenInclude(fc => fc.Category)
-            .Where(f => f.FilmCategories.Any(fc => fc.Category.Name == "Family"))
-            .OrderByDescending(f => f.Length)
-            .Take(5)
-            .ToListAsync();
+            const int pageSize = 10;
+            var consulta = _context.Films
+                .Include(f => f.Language)
+                .Include(f => f.OriginalLanguage)
+                .AsQueryable();
+
+            if (!string.IsNullOrWhiteSpace(buscar))
+            {
+                consulta = consulta.Where(f => f.Title.Contains(buscar));
+            }
+
+            if (duracionMinima.HasValue)
+            {
+                consulta = consulta.Where(f => f.Length >= duracionMinima.Value);
+            }
+
+            pagina = Math.Max(1, pagina);
+            var totalItems = await consulta.CountAsync();
+            var totalPages = (int)Math.Ceiling((double)totalItems / pageSize);
+            totalPages = Math.Max(1, totalPages);
+            pagina = Math.Min(pagina, totalPages);
+
+            var peliculas = await consulta
+                .OrderBy(f => f.Title)
+                .Skip((pagina - 1) * pageSize)
+                .Take(pageSize)
+                .ToListAsync();
+
+            ViewBag.Buscar = buscar;
+            ViewBag.DuracionMinima = duracionMinima;
+            ViewBag.PaginaActual = pagina;
+            ViewBag.TotalPaginas = totalPages;
+            ViewBag.PageSize = pageSize;
+
             return View(peliculas);
         }
 
