@@ -44,7 +44,7 @@
                 <dd class="col-sm-9">@Html.DisplayFor(model => model.Language.LanguageId)</dd>
 
                 <dt class="col-sm-3 fw-semibold">@Html.DisplayNameFor(model => model.OriginalLanguage)</dt>
-                <dd class="col-sm-9">@Html.DisplayFor(model => model.OriginalLanguage.LanguageId)</dd>
+                <dd class="col-sm-9">@(Model.OriginalLanguage?.LanguageId)</dd>
             </dl>
 
             <div class="mt-3">
