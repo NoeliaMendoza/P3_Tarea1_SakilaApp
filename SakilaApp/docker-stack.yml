@@ -4,30 +4,30 @@ services:
     sakilaapp:
         image: sakilaapp:latest
         ports:
-            - '5164:8080'
+            - '8081:8080'
         environment:
             - ASPNETCORE_ENVIRONMENT=Development
             - ASPNETCORE_URLS=http://+:8080
-            - ConnectionStrings__DefaultConnection=${SAKILAAPP_DEFAULT_CONNECTION}
-            - ConnectionStrings__IdentityConnection=${SAKILAAPP_IDENTITY_CONNECTION}
-            - Authentication__Google__ClientId=${GOOGLE_CLIENT_ID}
-            - Authentication__Google__ClientSecret=${GOOGLE_CLIENT_SECRET}
-            - EmailSettings__SmtpServer=${GMAIL_SMTP_SERVER}
-            - EmailSettings__SmtpPort=${GMAIL_SMTP_PORT}
-            - EmailSettings__SenderName=${GMAIL_SENDER_NAME}
-            - EmailSettings__SenderEmail=${GMAIL_SENDER_EMAIL}
-            - EmailSettings__Password=${GMAIL_PASSWORD}
-            - PayPhone__Token=${PAYPHONE_TOKEN}
-            - PayPhone__StoreId=${PAYPHONE_STORE_ID}
-            - PayPal__ClientId=${PAYPAL_CLIENT_ID}
-            - PayPal__ClientSecret=${PAYPAL_CLIENT_SECRET}
-            - PayPal__BaseUrl=${PAYPAL_BASE_URL}
-            - PayPal__ReturnUrl=${PAYPAL_RETURN_URL}
-            - PayPal__CancelUrl=${PAYPAL_CANCEL_URL}
+            - ConnectionStrings__DefaultConnection=Host=postgres;Port=5432;Database=sakila;Username=postgres;Password=postgres
+            - ConnectionStrings__IdentityConnection=Host=postgres;Port=5432;Database=sakiladb;Username=postgres;Password=postgres
+            - Authentication__Google__ClientId=dummy
+            - Authentication__Google__ClientSecret=dummy
+            - EmailSettings__SmtpServer=smtp.gmail.com
+            - EmailSettings__SmtpPort=587
+            - EmailSettings__SenderName=SakilaApp
+            - EmailSettings__SenderEmail=dummy@gmail.com
+            - EmailSettings__Password=dummy
+            - PayPhone__Token=dummy
+            - PayPhone__StoreId=dummy
+            - PayPal__ClientId=dummy
+            - PayPal__ClientSecret=dummy
+            - PayPal__BaseUrl=https://api-m.sandbox.paypal.com
+            - PayPal__ReturnUrl=http://localhost:8081/Payment/Success
+            - PayPal__CancelUrl=http://localhost:8081/Payment/Cancel
         depends_on:
             - postgres
         networks:
-            - sakila-network
+            - sakila-default-net
         deploy:
             replicas: 2
             update_config:
@@ -43,17 +43,17 @@ services:
     postgres:
         image: postgres:17
         environment:
-            POSTGRES_USER: ${POSTGRES_USER}
-            POSTGRES_PASSWORD: ${POSTGRES_PASSWORD}
-            POSTGRES_DB: ${POSTGRES_DB}
+            POSTGRES_USER: postgres
+            POSTGRES_PASSWORD: postgres
+            POSTGRES_DB: sakiladb
         volumes:
             - pgdata:/var/lib/postgresql/data
             - ./database/init-sakila.sh:/docker-entrypoint-initdb.d/init-sakila.sh
-      - ./database/sakila_backup.sql:/docker-entrypoint-initdb.d/sakila_backup.sql
+            - ./database/sakila_backup.sql:/docker-entrypoint-initdb.d/sakila_backup.sql
         ports:
             - '5433:5432'
         networks:
-            - sakila-network
+            - sakila-default-net
         deploy:
             replicas: 1
             placement:
@@ -70,5 +70,8 @@ volumes:
         driver: local
 
 networks:
-    sakila-network:
+    sakila-default-net:
         driver: overlay
+        ipam:
+            config:
+                - subnet: 10.200.0.0/24
